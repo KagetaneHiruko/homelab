@@ -6,7 +6,7 @@
   tasks:
     - name: Check if SSH key pair exists
       stat:
-        path: ~/.ssh/id_rsa.pub
+        path: /home/{{ remoteuser }}/.ssh/id_rsa.pub
       register: ssh_key
 
     - name: Disable SSH password authentication
