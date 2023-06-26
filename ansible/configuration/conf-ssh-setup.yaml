@@ -17,6 +17,13 @@
         state: present
       notify: restart sshd
       when: ssh_key.stat.exists
+      
+    - name: Remove file (delete file)
+      ansible.builtin.file:
+        path: /etc/foo.txt
+        state: absent
+      notify: restart sshd
+      when: ssh_key.stat.exists
 
     - name: Disable root SSH login
       lineinfile:
