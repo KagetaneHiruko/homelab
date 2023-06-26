@@ -1,0 +1,15 @@
+---
+- name: install qemu-guest-agent
+  hosts: proxmox-vm
+  become: yes
+  tasks:   
+    - name: install qemu-guest-agent
+      apt:
+        name: qemu-guest-agent
+        update_cache: yes
+        
+    - name: Start and Enable qemu-guest-agent
+      ansible.builtin.systemd:
+        state: started
+        enabled: true
+        name: qemu-guest-agent
