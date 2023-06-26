@@ -20,7 +20,7 @@
         
     - name: add docker repository
       apt_repository:
-        repo: deb [arch=arm64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/raspbian {{ ansible_lsb.codename|lower }} stable
+        repo: deb [arch=arm64] https://download.docker.com/linux/raspbian {{ ansible_lsb.codename|lower }} stable
         state: present
         
     - name: install docker engine
