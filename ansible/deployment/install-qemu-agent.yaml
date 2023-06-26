@@ -1,6 +1,6 @@
 ---
 - name: install qemu-guest-agent
-  hosts: proxmox-vm
+  hosts: proxmox_vm
   become: yes
   tasks:   
     - name: install qemu-guest-agent
