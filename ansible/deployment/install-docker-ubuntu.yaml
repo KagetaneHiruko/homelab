@@ -40,4 +40,4 @@
       ansible.builtin.user:
         name: wiecktim
         append: yes
-        group: docker
+        groups: docker
