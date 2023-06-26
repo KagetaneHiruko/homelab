@@ -1,8 +1,7 @@
 ---
 - name: Aktualisiere Linux Server über APT
   hosts: linux
-  become: true
-
+  become: yes
   tasks:
     - name: Update-Paketliste
       apt:
