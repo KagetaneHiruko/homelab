@@ -1,6 +1,6 @@
 ---
 - name: SSH Configuration
-  hosts: linux
+  hosts: ubuntu
   become: true
   tasks:
     - name: Check if SSH key pair exists
