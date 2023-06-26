@@ -2,7 +2,6 @@
 - name: SSH Configuration
   hosts: linux
   become: true
-
   tasks:
     - name: Check if SSH key pair exists
       stat:
@@ -18,9 +17,9 @@
       notify: restart sshd
       when: ssh_key.stat.exists
       
-    - name: Remove file (delete file)
+    - name: Delete CloudInit File in sshd_config.d
       ansible.builtin.file:
-        path: /etc/foo.txt
+        path: /etc/ssh/sshd_config.d/50-cloud-init.conf
         state: absent
       notify: restart sshd
       when: ssh_key.stat.exists
