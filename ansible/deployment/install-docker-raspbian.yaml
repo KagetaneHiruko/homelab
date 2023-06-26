@@ -23,6 +23,10 @@
         repo: deb [arch=arm64] https://download.docker.com/linux/raspbian {{ ansible_lsb.codename|lower }} stable
         state: present
         
+    - name: Paketliste aktualisieren
+      apt:
+        update_cache: yes    
+        
     - name: install docker engine
       apt:
         name:
