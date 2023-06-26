@@ -1,0 +1,43 @@
+---
+- name: Install Docker and Docker Compose
+  hosts: docker
+  become: true
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - gnupg
+          - ca-certificates
+          - curl
+        state: present
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
+        state: present
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+
+    - name: Add Docker user to docker group
+      user:
+        name: "WIECKTIM"
+        groups: docker
+        append: yes
+
+    - name: Install Docker Compose
+      apt:
+        name: docker-compose
+        state: present
+
