@@ -1,6 +1,6 @@
 ---
 - name: install docker
-  hosts: docker&ubuntu
+  hosts: docker:&ubuntu
   become: yes
   tasks:
     - name: install docker dependencies
