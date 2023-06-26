@@ -1,0 +1,33 @@
+---
+- name: SSH Configuration
+  hosts: linux
+  become: true
+
+  tasks:
+    - name: Check if SSH key pair exists
+      stat:
+        path: ~/.ssh/id_rsa.pub
+      register: ssh_key
+
+    - name: Disable SSH password authentication
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^#?PasswordAuthentication'
+        line: 'PasswordAuthentication no'
+        state: present
+      notify: restart sshd
+      when: ssh_key.stat.exists
+
+    - name: Disable root SSH login
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^#?PermitRootLogin'
+        line: 'PermitRootLogin no'
+        state: present
+      notify: restart sshd
+
+  handlers:
+    - name: restart sshd
+      service:
+        name: sshd
+        state: restarted
