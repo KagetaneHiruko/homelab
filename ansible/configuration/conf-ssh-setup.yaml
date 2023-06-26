@@ -24,13 +24,6 @@
         state: absent  
       notify: restart sshd
       when: ssh_key.stat.exists
-      
-    - name: Delete CloudInit File in sshd_config.d
-      ansible.builtin.file:
-        path: /etc/ssh/sshd_config.d/50-cloud-init.conf
-        state: absent
-      notify: restart sshd
-      when: ssh_key.stat.exists
 
     - name: Disable root SSH login
       lineinfile:
