@@ -1,0 +1,13 @@
+---
+- name: Mount Docker Storage
+  hosts: docker
+  become: true
+  tasks:
+    - name: Mount NFS volumes with noauto according to boot option
+      ansible.posix.mount:
+        src: {{ remotedockerstorage }}
+        path: /mnt/docker
+        opts: auto
+        boot: true
+        state: mounted
+        fstype: nfs
