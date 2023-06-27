@@ -98,6 +98,20 @@
         name: wiecktim
         append: yes
         groups: docker
+        
+    - name: Install nfs-common
+      apt:
+        name: nfs-common
+        update_cache: yes
+        
+    - name: Mount NFS Share at boot
+      ansible.posix.mount:
+        src: "{{ remotedockerstorage }}"
+        path: /mnt/docker
+        opts: auto
+        boot: true
+        state: mounted
+        fstype: nfs
 
   handlers:
     - name: restart sshd

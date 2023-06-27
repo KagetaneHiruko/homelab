@@ -17,15 +17,13 @@
       apt_key:
         url: https://download.docker.com/linux/raspbian/gpg
         state: present
+        keyring: /etc/apt/keyrings/docker.gpg
         
     - name: add docker repository
       apt_repository:
-        repo: deb [arch=arm64] https://download.docker.com/linux/raspbian {{ ansible_lsb.codename|lower }} stable
+        filename: docker 
+        repo: deb [arch=arm64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/raspbian {{ ansible_lsb.codename|lower }} stable
         state: present
-        
-    - name: Paketliste aktualisieren
-      apt:
-        update_cache: yes    
         
     - name: install docker engine
       apt:
