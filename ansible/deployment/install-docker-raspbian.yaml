@@ -1,6 +1,6 @@
 ---
 - name: install docker
-  hosts: docker:&raspbian
+  hosts: debian:raspbian:&docker
   become: yes
   tasks:
     - name: install docker dependencies
