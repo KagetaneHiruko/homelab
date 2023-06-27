@@ -2,7 +2,12 @@
 - name: Mount Docker Storage
   hosts: docker
   become: true
-  tasks:
+  tasks: 
+    - name: install nfs-common
+      apt:
+        name: nfs-common
+        update_cache: yes
+        
     - name: Mount NFS volumes with noauto according to boot option
       ansible.posix.mount:
         src: "{{ remotedockerstorage }}"
