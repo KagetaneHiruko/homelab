@@ -5,7 +5,7 @@
   tasks:
     - name: Mount NFS volumes with noauto according to boot option
       ansible.posix.mount:
-        src: {{ remotedockerstorage }}
+        src: "{{ remotedockerstorage }}"
         path: /mnt/docker
         opts: auto
         boot: true
