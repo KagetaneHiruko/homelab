@@ -1,0 +1,106 @@
+---
+- name: Full Install of Production Docker VM's
+  hosts: ubuntu:&docker:&proxmox_vm
+  become: true
+  tasks:
+    - name: Update-Paketliste
+      apt:
+        update_cache: yes
+      register: update_result
+
+    - name: Führe APT-Upgrade durch
+      apt:
+        upgrade: yes
+        autoremove: yes
+        autoclean: yes
+      when: update_result.changed
+      register: upgrade_result
+
+    - name: Starte den Server neu
+      reboot:
+      when: upgrade_result.changed
+
+    - name: Check if SSH key pair exists
+      stat:
+        path: /home/{{ remoteuser }}/.ssh/authorized_keys
+      register: ssh_key
+
+    - name: Disable SSH password authentication
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^#?PasswordAuthentication'
+        line: 'PasswordAuthentication no'
+        state: present
+      notify: restart sshd
+      when: ssh_key.stat.exists
+      
+    - name: Remove line from sshd_config
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^Include /etc/ssh/sshd_config.d/\*.conf'
+        state: absent  
+      notify: restart sshd
+      when: ssh_key.stat.exists
+
+    - name: Disable root SSH login
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^#?PermitRootLogin'
+        line: 'PermitRootLogin no'
+        state: present
+      notify: restart sshd
+      
+    - name: install qemu-guest-agent
+      apt:
+        name: qemu-guest-agent
+        update_cache: yes
+        
+    - name: Start and Enable qemu-guest-agent
+      ansible.builtin.systemd:
+        state: started
+        enabled: true
+        name: qemu-guest-agent
+        
+    - name: install docker dependencies
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+        update_cache: yes
+        
+    - name: add docker gpg key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+        keyring: /etc/apt/keyrings/docker.gpg
+        
+    - name: add docker repository
+      apt_repository:
+        filename: docker 
+        repo: deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename|lower }} stable
+        state: present
+        
+    - name: install docker engine
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        update_cache: yes
+        
+    - name: Add the user 'wiecktim' to the group 'docker'
+      ansible.builtin.user:
+        name: wiecktim
+        append: yes
+        groups: docker
+
+  handlers:
+    - name: restart sshd
+      service:
+        name: sshd
+        state: restarted
