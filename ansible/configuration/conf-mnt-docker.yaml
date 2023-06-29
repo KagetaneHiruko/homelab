@@ -12,7 +12,7 @@
       ansible.posix.mount:
         src: "{{ remotedockerstorage }}"
         path: /mnt/docker
-        opts: auto
+        opts: rw,auto
         boot: true
         state: mounted
         fstype: nfs
