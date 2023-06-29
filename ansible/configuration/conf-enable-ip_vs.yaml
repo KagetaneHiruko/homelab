@@ -1,0 +1,9 @@
+---
+- name: Enable Kernel Module ip_vs
+  hosts: docker
+  become: true
+  tasks:
+    - name: Add the ip_vs module
+      community.general.modprobe:
+        name: ip_vs
+        state: present
