@@ -6,9 +6,9 @@
    - name: Enable ip_vs Kernel module
      lineinfile:
       dest: /etc/modules
-       regexp: 'modprobe ip_vs'
-       line: 'modprobe ip_vs'
-       state: present
+      regexp: 'modprobe ip_vs'
+      line: 'modprobe ip_vs'
+      state: present
 
    - name: Starte den Server neu
-      reboot:
+     reboot:
