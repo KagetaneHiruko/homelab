@@ -1,6 +1,6 @@
 ---
 - name: Aktualisiere Linux Server über APT
-  hosts: ubuntu:raspbian
+  hosts: ubuntu:raspbian:debian
   become: yes
   tasks:
     - name: Update-Paketliste
