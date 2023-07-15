@@ -22,5 +22,6 @@ services:
       - /mnt/docker/grafana-influxdb/grafana:/var/lib/grafana
     ports:
       - 3000:3000
+    user: "$UID:$GID"
     depends_on:
       - db
