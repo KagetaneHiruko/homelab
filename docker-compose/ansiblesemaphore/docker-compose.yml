@@ -1,0 +1,44 @@
+version: "3"
+services:
+  mysql:
+    container_name: ansiblesemaphore-db
+    image: mysql:8.0
+    hostname: mysql
+    volumes:
+      - /mnt/docker/semaphore/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=semaphore
+      - MYSQL_USER=semaphore
+      - MYSQL_PASSWORD=${SEMAPHORE_MYSQL_PASSWORD}
+    restart: unless-stopped
+    
+  semaphore:
+    container_name: ansiblesemaphore
+    image: semaphoreui/semaphore:v2.8.90
+    dns: #[OPTIONAL] DNS, falls im Inventory mit FQDN's gearbeitet wird. Tragt hier eure DNS Server ein.
+      - 192.168.179.21
+      - 192.168.179.100
+    ports:
+      - 3007:3000
+    environment:
+      - SEMAPHORE_DB_USER=semaphore
+      - SEMAPHORE_DB_PASS=${SEMAPHORE_MYSQL_PASSWORD}
+      - SEMAPHORE_DB_HOST=mysql
+      - SEMAPHORE_DB_PORT=3306
+      - SEMAPHORE_DB_DIALECT=mysql
+      - SEMAPHORE_DB=semaphore
+      - SEMAPHORE_PLAYBOOK_PATH=/tmp/semaphore/
+      - SEMAPHORE_ADMIN_PASSWORD=${SEMAPHORE_ADMIN_PASSWORD}
+      - SEMAPHORE_ADMIN_NAME=admin
+      - SEMAPHORE_ADMIN_EMAIL=admin@localhost
+      - SEMAPHORE_ADMIN=admin
+      - SEMAPHORE_ACCESS_KEY_ENCRYPTION=${SEMAPHORE_ACCESS_KEY_ENCRYPTION}
+      - ANSIBLE_HOST_KEY_CHECKING=false
+    volumes:
+      - /mnt/docker/semaphore/:/inventory
+      - /mnt/docker/semaphore/:/authorized-keys
+      - /mnt/docker/semaphore/:/etc/semaphore
+    restart: unless-stopped
+    depends_on:
+      - mysql
