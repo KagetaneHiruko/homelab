@@ -1,8 +1,8 @@
 version: "3"
 services:
   bitwarden:
-    image: vaultwarden/server:latest
     container_name: bitwarden
+    image: vaultwarden/server:latest
     restart: unless-stopped
     networks:
       - proxy

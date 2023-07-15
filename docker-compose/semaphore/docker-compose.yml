@@ -3,6 +3,7 @@ services:
   mysql:
     container_name: ansiblesemaphore-db
     image: mysql:8.0
+    restart: unless-stopped
     hostname: mysql
     volumes:
       - /mnt/docker/semaphore/mysql:/var/lib/mysql
@@ -11,11 +12,15 @@ services:
       - MYSQL_DATABASE=semaphore
       - MYSQL_USER=semaphore
       - MYSQL_PASSWORD=${SEMAPHORE_MYSQL_PASSWORD}
-    restart: unless-stopped
     
   semaphore:
     container_name: ansiblesemaphore
     image: semaphoreui/semaphore:v2.8.90
+    restart: unless-stopped
+    volumes:
+      - /mnt/docker/semaphore/:/inventory
+      - /mnt/docker/semaphore/:/authorized-keys
+      - /mnt/docker/semaphore/:/etc/semaphore
     dns: #[OPTIONAL] DNS, falls im Inventory mit FQDN's gearbeitet wird. Tragt hier eure DNS Server ein.
       - 192.168.179.21
       - 192.168.179.100
@@ -35,10 +40,5 @@ services:
       - SEMAPHORE_ADMIN=admin
       - SEMAPHORE_ACCESS_KEY_ENCRYPTION=${SEMAPHORE_ACCESS_KEY_ENCRYPTION}
       - ANSIBLE_HOST_KEY_CHECKING=false
-    volumes:
-      - /mnt/docker/semaphore/:/inventory
-      - /mnt/docker/semaphore/:/authorized-keys
-      - /mnt/docker/semaphore/:/etc/semaphore
-    restart: unless-stopped
     depends_on:
       - mysql
