@@ -1,8 +1,8 @@
 version: "3"
 services:
   baikal:
-    image: ckulka/baikal:nginx
     container_name: baikal
+    image: ckulka/baikal:nginx
     restart: unless-stopped
     networks:
       - proxy

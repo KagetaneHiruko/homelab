@@ -1,41 +1,41 @@
 version: "3.2"
 services:
-    changedetection:
-      container_name: changedetection
-      image: ghcr.io/dgtlmoon/changedetection.io
-      restart: unless-stopped
-      volumes:
-        - /mnt/docker/changedetection:/datastore
-      networks:
-        - proxy
-        - internal
-      environment:
-        - PLAYWRIGHT_DRIVER_URL=ws://playwright-chrome:3000/?stealth=1&--disable-web-security=true
-        - BASE_URL=${CHANGEDETECTION_BASE_URL}
-        - USE_X_SETTINGS=1
-        - HIDE_REFERER=false
-      depends_on:
-        playwright-chrome:
-            condition: service_started
+  changedetection:
+    container_name: changedetection
+    image: ghcr.io/dgtlmoon/changedetection.io
+    restart: unless-stopped
+    volumes:
+      - /mnt/docker/changedetection:/datastore
+    networks:
+      - proxy
+      - internal
+    environment:
+      - PLAYWRIGHT_DRIVER_URL=ws://playwright-chrome:3000/?stealth=1&--disable-web-security=true
+      - BASE_URL=${CHANGEDETECTION_BASE_URL}
+      - USE_X_SETTINGS=1
+      - HIDE_REFERER=false
+    depends_on:
+      playwright-chrome:
+          condition: service_started
 
-    playwright-chrome:
-        container_name: playwright-chrome
-        image: browserless/chrome
-        restart: unless-stopped
-        networks:
-            - proxy
-            - internal
-        environment:
-            - SCREEN_WIDTH=1920
-            - SCREEN_HEIGHT=1024
-            - SCREEN_DEPTH=16
-            - ENABLE_DEBUGGER=false
-            - PREBOOT_CHROME=true
-            - CONNECTION_TIMEOUT=300000
-            - MAX_CONCURRENT_SESSIONS=10
-            - CHROME_REFRESH_TIME=600000
-            - DEFAULT_BLOCK_ADS=true
-            - DEFAULT_STEALTH=true
+  playwright-chrome:
+    container_name: playwright-chrome
+    image: browserless/chrome
+    restart: unless-stopped
+    networks:
+      - proxy
+      - internal
+    environment:
+      - SCREEN_WIDTH=1920
+      - SCREEN_HEIGHT=1024
+      - SCREEN_DEPTH=16
+      - ENABLE_DEBUGGER=false
+      - PREBOOT_CHROME=true
+      - CONNECTION_TIMEOUT=300000
+      - MAX_CONCURRENT_SESSIONS=10
+      - CHROME_REFRESH_TIME=600000
+      - DEFAULT_BLOCK_ADS=true
+      - DEFAULT_STEALTH=true
 
 networks:
   proxy:
