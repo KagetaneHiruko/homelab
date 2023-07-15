@@ -7,7 +7,7 @@ services:
     networks:
       - proxy
     volumes:
-      - /path/to/bitwarden:/data
+      - /mnt/docker/bitwarden:/data
     environment:
       - "ADMIN_TOKEN=${VAULTWARDEN_ADMIN_TOKEN}"
       - "DOMAIN=${VAULTWARDEN_DOMAIN}"
