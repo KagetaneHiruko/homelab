@@ -1,5 +1,7 @@
 # Vaultwarden Docker-Compose (NPM Ready)
 
+Vaultwarden ist ein Open-Source Server für den Passwortmanager Bitwarden.
+
 Projekt: [Vaultwarden](https://github.com/dani-garcia/vaultwarden)
 Dokumentation: [Vaultwarden Wiki](https://github.com/dani-garcia/vaultwarden/wiki)
 
