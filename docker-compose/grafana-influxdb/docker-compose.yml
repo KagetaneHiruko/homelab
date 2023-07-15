@@ -8,11 +8,6 @@ services:
       - /mnt/docker/grafana-influxdb/influxdb:/var/lib/influxdb2
     ports:
       - 8086:8086
-    environment:
-      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_INIT_USERNAME}
-      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_INIT_PASSWORD}
-      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_INIT_ORG}
-      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_INIT_BUCKET}
 
   dashboard:
     container_name: grafana
