@@ -1,0 +1,15 @@
+version: "3"
+services:
+  baikal:
+    image: ckulka/baikal:nginx
+    container_name: baikal
+    restart: unless-stopped
+    networks:
+      - proxy
+    volumes:
+      - /mnt/docker/baikal/config:/var/www/baikal/config
+      - /mnt/docker/baikal/Specific:/var/www/baikal/Specific
+    
+networks:
+  proxy:
+    external: true
