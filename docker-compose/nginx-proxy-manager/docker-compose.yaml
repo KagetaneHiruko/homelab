@@ -1,0 +1,19 @@
+version: "3"
+services:
+  npm:
+    container_name: NGINX-Proxy-Manager
+    image: jc21/nginx-proxy-manager:latest
+    restart: unless-stopped
+    networks:
+      - proxy
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"
+    volumes:
+      - /mnt/docker/nginx-proxy/data:/data
+      - /mnt/docker/nginx-proxy/letsencrypt:/etc/letsencrypt
+
+networks:
+  proxy:
+    external: true
