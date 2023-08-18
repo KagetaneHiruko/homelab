@@ -1,0 +1,47 @@
+version: "3"
+services:
+  healthchecks:
+    container_name: healthchecks
+    image: healthchecks/healthchecks:latest
+    restart: unless-stopped
+    networks:
+      - proxy
+      - internal
+    environment:
+      - ALLOWED_HOSTS=$ALLOWED_HOSTS
+      - REGISTRATION_OPEN=False
+      - DB=postgres
+      - DB_NAME=$DB_NAME
+      - DB_HOST=db
+      - DB_PASSWORD=$DB_PASSWORD
+      - DEBUG=False
+      - DEFAULT_FROM_EMAIL=$DEFAULT_FROM_EMAIL
+      - EMAIL_HOST=$EMAIL_HOST
+      - EMAIL_HOST_PASSWORD=$EMAIL_HOST_PASSWORD
+      - EMAIL_HOST_USER=$EMAIL_HOST_USER
+      - EMAIL_PORT=587
+      - EMAIL_USE_TLS=True
+      - TELEGRAM_BOT_NAME=$TELEGRAM_BOT_NAME
+      - TELEGRAM_TOKEN=$TELEGRAM_TOKEN
+      - SECRET_KEY=$SECRET_KEY
+      - SITE_ROOT=$SITE_ROOT
+    depends_on:
+        - db
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uwsgi /opt/healthchecks/docker/uwsgi.ini' 
+
+  db:
+    container_name: HC-PostgresDB
+    image: postgres:12
+    restart: unless-stopped
+    networks:
+      - internal
+    volumes:
+      - /mnt/docker/healthchecks/db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=$DB_NAME
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+
+networks:
+  proxy:
+    external: true
+  internal:

@@ -1,0 +1,34 @@
+version: "3.0"
+services:
+  containerstring:
+    container_name: Name des Containers
+    image: Image des Containers
+    restart: unless-stopped
+    networks:
+      - proxy
+      - internal
+    volumes:
+      - /mnt/docker/container:/container
+    environment:
+      - VARIABEL=${VARIABEL}
+      - VARIABEL2=1
+    depends_on:
+      containerstring2:
+          condition: service_started
+
+  containerstring2:
+    container_name: Name des Containers
+    image: Image des Containers
+    restart: unless-stopped
+    networks:
+      - internal
+    volumes:
+      - /mnt/docker/container2:/container2
+    environment:
+      - VARIABEL=${VARIABEL}
+      - VARIABEL2=1
+
+networks:
+  proxy:
+    external: true
+  internal:
