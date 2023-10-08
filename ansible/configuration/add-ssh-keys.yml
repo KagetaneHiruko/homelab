@@ -1,6 +1,6 @@
 ---
 - name: Set SSH Keys
-  hosts: ubuntu && mailsrv
+  hosts: mailsrv
   become: true
   tasks:
     - name: Set authorized keys taken from url
