@@ -1,0 +1,33 @@
+version: "3"
+services:
+  bitwarden:
+    container_name: bitwarden
+    image: vaultwarden/server:latest
+    restart: unless-stopped
+    networks:
+      - proxy
+    volumes:
+      - Vaultwarden:/data
+    environment:
+      - "ADMIN_TOKEN=${VAULTWARDEN_ADMIN_TOKEN}"
+      - "DOMAIN=${VAULTWARDEN_DOMAIN}"
+      - "SMTP_HOST=${VAULTWARDEN_SMTP_HOST}"
+      - "SMTP_FROM=${VAULTWARDEN_SMTP_FROM}"
+      - "SMTP_SECURITY=force_tls"
+      - "SMTP_PORT=465"
+      - "SMTP_USERNAME=${VAULTWARDEN_SMTP_USERNAME}"
+      - "SMTP_PASSWORD=${VAULTWARDEN_SMTP_PASSWORD}"
+      - "SMTP_TIMEOUT=15"
+      - "EMAIL_TOKEN_SIZE=6" 
+      - "EMAIL_ATTEMPTS_LIMIT=3" 
+      - "EMAIL_EXPIRATION_TIME=600" 
+      - "YUBICO_CLIENT_ID=${VAULTWARDEN_YUBICO_CLIENT_ID}"
+      - "YUBICO_SECRET_KEY=${VAULTWARDEN_YUBICO_SECRET_KEY}"
+      - "SIGNUPS_ALLOWED=false" 
+
+volumes:
+  Vaultwarden:
+
+networks:
+  proxy:
+    external: true
