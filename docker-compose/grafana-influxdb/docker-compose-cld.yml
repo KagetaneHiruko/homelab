@@ -1,0 +1,25 @@
+version: "3.4"
+services:
+  db:
+    container_name: influxdb
+    image: influxdb:2.7.1-alpine
+    restart: unless-stopped
+    volumes:
+      - grafana-influxdb/influxdb:/var/lib/influxdb2
+    ports:
+      - 8086:8086
+
+  dashboard:
+    container_name: grafana
+    image: grafana/grafana-oss:main
+    restart: unless-stopped
+    volumes:
+      - grafana-influxdb/grafana:/var/lib/grafana
+    ports:
+      - 3000:3000
+    user: "$UID:$GID"
+    depends_on:
+      - db
+
+volumes:
+  grafana-influxdb:
