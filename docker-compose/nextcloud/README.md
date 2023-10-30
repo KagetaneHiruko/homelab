@@ -17,4 +17,4 @@ Konfiguration:
   'default_phone_region' => 'DE',
 
 Troubleshooting:
-- Office Daten können nicht gespeichert werden: Bitte schau mal in die config/config.php des nextcloud containers, wenn du dort folgendes siehst: "\\OC\\Memcache\\Redis" und "\\OC\\Memcache\\APCu", das muss aber so aussehen "\OC\Memcache\Redis" und "\OC\Memcache\APCu".
+- Office Daten können nicht gespeichert werden: Bitte schau mal in die config/config.php des nextcloud containers, wenn du dort folgendes siehst: "\\\OC\\\Memcache\\\Redis" und "\\\OC\\\Memcache\\\APCu", das muss aber so aussehen "\OC\Memcache\Redis" und "\OC\Memcache\APCu".
