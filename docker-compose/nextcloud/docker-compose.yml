@@ -1,0 +1,81 @@
+version: "3.0"
+services:
+  nc-db:
+    container_name: NC-Mariadb
+    image: mariadb:10.6
+    restart: unless-stopped
+    networks:
+      - nc-internal
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+
+  nc-redis:
+    container_name: NC-Redis
+    image: redis
+    restart: unless-stopped
+    networks:
+      - nc-internal
+
+  nc-collabora:
+    container_name: NC-Collabora
+    image: collabora/code:latest
+    restart: unless-stopped
+    networks:
+      - proxy
+      - nc-internal
+    extra_hosts:
+      - "${CB_DOMAIN}:${RP_HOST}"
+      - "${NC_DOMAIN}:${RP_HOST}"
+    environment:
+      - username=${COLLABORA_USERNAME}
+      - password=${COLLABORA_PASSWORD}
+      - domain=${NC_DOMAIN}
+      - extra_params=--o:ssl.enable=true
+
+  nc-app:
+    container_name: NC-Nextcloud
+    image: nextcloud:27
+    restart: unless-stopped
+    networks:
+      - proxy
+      - nc-internal
+    extra_hosts:
+      - "${CB_DOMAIN}:${RP_HOST}"
+      - "${NC_DOMAIN}:${RP_HOST}"
+    volumes:
+      - nextcloud:/var/www/html
+    environment:
+      - APACHE_DISABLE_REWRITE_IP=1
+      - TRUSTED_PROXIES=${DOCKER_NPM_NET}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_HOST=nc-db
+      - REDIS_HOST=nc-redis
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_SECURE=ssl
+      - SMTP_PORT=465
+      - SMTP_AUTHTYPE=LOGIN
+      - SMTP_NAME=${SMTP_NAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - MAIL_FROM_ADDRESS=${SMTP_FROM}
+      - MAIL_DOMAIN=${SMTP_DOMAIN}
+    depends_on:
+      - nc-db
+      - nc-redis
+      - nc-collabora
+
+volumes:
+  nextcloud:
+  db:
+
+networks:
+  proxy:
+    external: true
+  nc-internal:
