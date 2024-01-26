@@ -7,10 +7,10 @@ services:
     networks:
       - proxy
     volumes:
-      - Vaultwarden::/app/data
+      - Uptime-Kuma:/app/data
 
 volumes:
-  Vaultwarden:
+  Uptime-Kuma:
 
 networks:
   proxy:
