@@ -1,0 +1,17 @@
+version: '3'
+services:
+  linkding:
+    container_name: linkding
+    image: sissbruecker/linkding:latest
+    networks:
+      - proxy
+    volumes:
+      - Linkding:/etc/linkding/data
+    restart: unless-stopped
+
+volumes:
+  Linkding:
+
+networks:
+  proxy:
+    external: true
