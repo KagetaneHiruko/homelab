@@ -38,10 +38,7 @@ services:
       timeout: 10s
       retries: 5
     volumes:
-      - Paperless:/usr/src/paperless/data
-      - Paperless:/usr/src/paperless/media
-      - Paperless:/usr/src/paperless/export
-      - Paperless:/usr/src/paperless/consume
+      - Paperless:/usr/src/paperless
     environment:
       PAPERLESS_REDIS: redis://broker:6379
       PAPERLESS_DBHOST: db
