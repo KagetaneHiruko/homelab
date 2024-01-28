@@ -1,7 +1,7 @@
 version: "3"
 services:
   healthchecks:
-    container_name: healthchecks
+    container_name: HC-Healthchecks
     image: healthchecks/healthchecks:latest
     restart: unless-stopped
     networks:
