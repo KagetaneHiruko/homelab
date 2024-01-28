@@ -11,7 +11,7 @@ services:
 
   db:
     container_name: paperless-db
-    image: postgres:15
+    image: postgres:13
     networks:
       - internal
     restart: unless-stopped
