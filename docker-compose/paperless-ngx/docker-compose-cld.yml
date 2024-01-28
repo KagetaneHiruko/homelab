@@ -40,7 +40,10 @@ services:
       timeout: 10s
       retries: 5
     volumes:
-      - Paperless:/usr/src/paperless
+      - data:/usr/src/paperless/data
+      - media:/usr/src/paperless/media
+      - export:/usr/src/paperless/export
+      - consume:/usr/src/paperless/consume
     environment:
       PAPERLESS_REDIS: redis://broker:6379
       PAPERLESS_DBHOST: db
@@ -54,7 +57,10 @@ services:
       PAPERLESS_FILENAME_FORMAT: "{created_year}/{correspondent}/{title}"
 
 volumes:
-  Paperless:
+  data:
+  media:
+  export:
+  consume:
   pgdata:
   redisdata:
 
