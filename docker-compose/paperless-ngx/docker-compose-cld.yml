@@ -6,8 +6,6 @@ services:
     networks:
       - internal
     restart: unless-stopped
-    volumes:
-      - redisdata:/data
 
   db:
     container_name: paperless-db
