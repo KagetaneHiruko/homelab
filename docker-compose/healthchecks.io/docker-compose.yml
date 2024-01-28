@@ -36,7 +36,7 @@ services:
     networks:
       - internal
     volumes:
-      - /mnt/docker/healthchecks/db-data:/var/lib/postgresql/data
+      - /mnt/docker/healthchecks:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=$DB_NAME
       - POSTGRES_PASSWORD=$DB_PASSWORD

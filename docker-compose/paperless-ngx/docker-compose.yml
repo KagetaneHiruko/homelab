@@ -1,0 +1,61 @@
+version: "3.4"
+services:
+  broker:
+    container_name: paperless-redis
+    image: redis:6.0
+    networks:
+      - internal
+    restart: unless-stopped
+
+  db:
+    container_name: paperless-db
+    image: postgres:13
+    networks:
+      - internal
+    restart: unless-stopped
+    volumes:
+      - /mnt/docker/paperless/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  webserver:
+    container_name: paperless-ngx
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    networks:
+      - paperless_net
+      - internal
+    restart: unless-stopped
+    depends_on:
+      - db
+      - broker
+    ports:
+      - ${PORT}:8000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /mnt/docker/paperless/data:/usr/src/paperless/data
+      - /mnt/docker/paperless/media:/usr/src/paperless/media
+      - /mnt/docker/paperless/export:/usr/src/paperless/export
+      - /mnt/docker/paperless/consume:/usr/src/paperless/consume
+    environment:
+      PAPERLESS_REDIS: redis://broker:6379
+      PAPERLESS_DBHOST: db
+      PAPERLESS_DBNAME: ${POSTGRES_DB}
+      PAPERLESS_DBUSER: ${POSTGRES_USER}
+      PAPERLESS_DBPASS: ${POSTGRES_PASSWORD}
+      PAPERLESS_OCR_LANGUAGES: eng deu
+      PAPERLESS_SECRET_KEY: ${PAPERLESS_SECRET_KEY}
+      PAPERLESS_TIME_ZONE: Europe/Berlin
+      PAPERLESS_OCR_LANGUAGE: deu
+      PAPERLESS_FILENAME_FORMAT: "{created_year}/{correspondent}/{title}"
+      
+networks:
+  paperless_net:
+    external: true
+  internal:
+    external: false
