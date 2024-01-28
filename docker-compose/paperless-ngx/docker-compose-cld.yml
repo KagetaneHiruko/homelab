@@ -43,6 +43,8 @@ services:
       - export:/usr/src/paperless/export
       - consume:/usr/src/paperless/consume
     environment:
+      USERMAP_UID: 1000
+      USERMAP_GID: 1000
       PAPERLESS_REDIS: redis://broker:6379
       PAPERLESS_DBHOST: db
       PAPERLESS_DBNAME: ${POSTGRES_DB}
