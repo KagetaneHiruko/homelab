@@ -2,14 +2,14 @@ version: "3.4"
 services:
   broker:
     container_name: paperless-redis
-    image: redis:6.0
+    image: redis:7
     networks:
       - internal
     restart: unless-stopped
 
   db:
     container_name: paperless-db
-    image: postgres:13
+    image: postgres:15
     networks:
       - internal
     restart: unless-stopped
