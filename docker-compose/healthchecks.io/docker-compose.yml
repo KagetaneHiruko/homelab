@@ -25,6 +25,7 @@ services:
       - TELEGRAM_TOKEN=$TELEGRAM_TOKEN
       - SECRET_KEY=$SECRET_KEY
       - SITE_ROOT=$SITE_ROOT
+      - PING_EMAIL_DOMAIN=$PING_EMAIL_DOMAIN
     depends_on:
         - db
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uwsgi /opt/healthchecks/docker/uwsgi.ini' 
