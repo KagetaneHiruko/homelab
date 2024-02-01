@@ -4,6 +4,8 @@ services:
     container_name: HC-Healthchecks
     image: healthchecks/healthchecks:latest
     restart: unless-stopped
+    ports:
+      - 2525:2525
     networks:
       - proxy
       - internal
@@ -26,6 +28,7 @@ services:
       - SECRET_KEY=$SECRET_KEY
       - SITE_ROOT=$SITE_ROOT
       - PING_EMAIL_DOMAIN=$PING_EMAIL_DOMAIN
+      - SMTPD_PORT=2525
     depends_on:
         - db
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uwsgi /opt/healthchecks/docker/uwsgi.ini' 
