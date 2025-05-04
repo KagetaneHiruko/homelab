@@ -40,7 +40,7 @@ services:
 
   nc-app:
     container_name: NC-Nextcloud
-    image: nextcloud:28
+    image: nextcloud:31
     restart: unless-stopped
     networks:
       - proxy
